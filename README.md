@@ -1,2 +1,2 @@
-# Github_Acion
+# Github_Action
 Integration_of_Github_with_ipynb
