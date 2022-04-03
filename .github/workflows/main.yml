@@ -4,12 +4,6 @@ name: Jupyter
 
 # Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the main branch
-  #push:
-  #  branches: [ main ]
-  #pull_request:
-  #  branches: [ main ]
-
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
   schedule:
@@ -24,20 +18,39 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      - id: repo
-        name: Repo checkout
-        uses: actions/checkout@v3
-      
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - id: repo 
+        name: Repo Checkout
+        uses: actions/checkout@v2
+
       - id: python
-        name: Python setup
-        uses: actions/setup-python@v3
+        name: Python Setup & Packages Installation
+        uses: actions/setup-python@v2
         with:
           python-version: '3.9'
           cache: 'pip'
       - run: pip install -r requirements.txt
 
-      - id: jupyter
-        name: Jupyter notebook
+      - id: jupyter 
+        name: Jupyter Notebook Execution
         run: jupyter execute download.ipynb
-        shell: bash  
-      
+        shell: bash 
+
+ # Add new files in folder, commit along with other modified files, push
+      - id: commit
+        name: Commit files
+        run:
+          git config --local user.name actions-user
+
+          git config --local user.email "actions@github.com"
+
+          git add *
+
+          git commit -am "GH ACTION Headlines $(date)"
+
+          git push origin main
+
+        env:
+          REPO_KEY: ${{secrets.GITHUB_TOKEN}}
+
+          username: github-actions
