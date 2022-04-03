@@ -36,7 +36,7 @@ jobs:
           cache: 'pip'
       - run: pip install -r requirements.txt
 
-    - id: jupyter
+      - id: jupyter
         name: Jupyter notebook
         run: jupyter execute download.ipynb
         shell: bash  
